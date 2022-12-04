@@ -34,9 +34,9 @@ const LoginScreen = () => {
     const { email, uid } = user;
     let userToSaveOnDatabase;
     if (email === 'admin@email.com') {
-      userToSaveOnDatabase = { email: email, id: uid, role: 'admin' };
+      userToSaveOnDatabase = { email: email, id: uid, role: 'ADMIN' };
     } else {
-      userToSaveOnDatabase = { email: email, id: uid, role: 'client' };
+      userToSaveOnDatabase = { email: email, id: uid, role: 'CLIENT' };
     }
 
     firebase.app().database()
@@ -120,9 +120,9 @@ const LoginScreen = () => {
             <View style={styles.button}>
               <Button title={'Sign In'} onPress={() => loginUser(email, password)} />
             </View>
-            <View style={styles.button}>
+            {/* <View style={styles.button}>
               <Button title="Logout" onPress={logoutUser} />
-            </View>
+            </View> */}
           </View>
 
       }

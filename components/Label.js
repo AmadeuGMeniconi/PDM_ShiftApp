@@ -6,7 +6,7 @@ const Label = ({ value, title }) => {
     <View style={styles.labelContainer}>
 
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.label}>{value}</Text>
+      <Text selectable={true} style={styles.label}>{value}</Text>
 
     </View>
   )
