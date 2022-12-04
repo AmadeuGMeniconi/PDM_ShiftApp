@@ -10,6 +10,9 @@ import { firebase } from '@react-native-firebase/database';
 // Redux
 import { changeCurrentUserName } from '../redux/reducers/currentUserSlice';
 
+// Component
+import Label from '../components/Label';
+
 
 const ProfileScreen = () => {
 
@@ -18,12 +21,14 @@ const ProfileScreen = () => {
     const currentUser = useSelector(store => store.currentUser);
 
     const [userName, setUserName] = useState('');
+    const [isEditName, setIsEditName] = useState(false);
 
     useEffect(() => {
         setUserName('')
     }, [currentUser.name])
 
     const changeUserName = (value) => {
+        setIsEditName(false);
         dispatch(changeCurrentUserName(value));
         firebase.app().database()
             .ref(`/users/${currentUser.id}/name`)
@@ -37,60 +42,36 @@ const ProfileScreen = () => {
     return (
         <View style={styles.wrapper}>
 
-            {currentUser.name ?
+            {!isEditName ?
                 <View>
                     <View style={styles.labelContainer}>
-                        <Text style={styles.label}>UID</Text>
-                        <Text style={[styles.label,
-                        {
-                            backgroundColor: 'white',
-                            padding: 10,
-                            borderRadius: 20,
-                            fontWeight: 'bold'
-                        }]}>{currentUser.id}</Text>
-                        <Text style={styles.label}>USER NAME</Text>
-                        <Text style={[styles.label,
-                        {
-                            backgroundColor: 'white',
-                            padding: 10,
-                            borderRadius: 20,
-                            fontWeight: 'bold'
-                        }]}>{currentUser.name}</Text>
+                        <Label value={currentUser.id} title='UID' />
+                        <Label value={currentUser.name} title='USERNAME' />
                     </View>
-                    <View style={styles.formContainer}>
-                        <TextInput
-                            style={styles.input}
-                            label="Username"
-                            placeholder="Change user name"
-                            value={userName}
-                            onChangeText={userName => setUserName(userName)}
-                        />
-                        <View style={styles.button}>
-                            <Button
-                                title="Confirm"
-                                onPress={() => changeUserName(userName)}
-                            />
-                        </View>
+
+                    <View style={styles.button}>
+                        <Button title="Change Name" onPress={() => setIsEditName(true)} />
                     </View>
+
                 </View>
                 :
                 <View >
-                    <View style={styles.labelContainer}>
-                        <Text style={styles.label}>Choose a user name</Text>
-                    </View>
                     <View style={styles.formContainer}>
+                        <Label value={currentUser.id} title='UID' />
+                        <Text style={styles.title}>USERNAME</Text>
                         <TextInput
                             style={styles.input}
                             label="Username"
-                            placeholder="Please add a username"
+                            placeholder="Choose username"
                             value={userName}
                             onChangeText={userName => setUserName(userName)}
                         />
+
                         <View style={styles.button}>
-                            <Button
-                                title="Confirm"
-                                onPress={() => changeUserName(userName)}
-                            />
+                            <Button title="Confirm" onPress={() => changeUserName(userName)} />
+                        </View>
+                        <View style={styles.button}>
+                            <Button title="Cancel" onPress={() => setIsEditName(false)} />
                         </View>
                     </View>
                 </View>}
@@ -108,35 +89,28 @@ const styles = StyleSheet.create({
         paddingVertical: 80,
         paddingHorizontal: 20,
     },
-    labelContainer: {
-        alignContent: 'center',
-
-    },
-    label: {
-        textAlign: 'center',
-        fontSize: 18,
-        marginVertical: 2
-    },
     formContainer: {
         display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
+        flexDirection: 'column',
         marginTop: 32,
     },
-
     input: {
-        width: 200,
+        textAlign: 'center',
         borderRadius: 5,
-        margin: 5,
+        marginBottom: 10,
         backgroundColor: 'white',
+    },
+    title: {
+        alignSelf: 'center',
+        fontSize: 16,
+        margin: 5
     },
     buttonContainer: {
         margin: 20,
     },
     button: {
         backgroundColor: 'red',
-        margin: 5,
+        marginVertical: 5,
     },
 
 });

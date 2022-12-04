@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
 
 // Navigation
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +20,24 @@ const HomeScreen = () => {
 
     const currentUser = useSelector(store => store.currentUser);
 
+    // const [tasks, setTasks] = useState([]);
+
+    // const renderItem = ({ item }) => (<TaskList description={item.description} date={item.date} />);
+
+    // useEffect(() => {
+    //     //retrieve tasks from database
+    //     firebase.app().database()
+    //         .ref(`users/${currentUser.id}/tasks`)
+    //         .once('value', (snapshot) => {
+    //             console.log("A escuta de dados foi iniciada");
+    //             const data = snapshot.val();
+    //             const loadedTasks = [];
+    //             for (let key in data) {
+    //                 loadedTasks.push(data[key]);
+    //             }
+    //             setTasks(loadedTasks)
+    //         });
+    // });
 
     //Logout user
     const logoutUser = () => {
@@ -36,7 +54,11 @@ const HomeScreen = () => {
             {currentUser.name ?
                 <Text style={styles.label} >Welcome {currentUser.name}</Text>
                 :
-                <Text style={styles.label} >Welcome User</Text>}
+                <Text style={styles.label} ></Text>
+            }
+            {/* <FlatList data={tasks}
+                renderItem={renderItem}
+                keyExtractor={item => item.id} /> */}
             <View style={styles.button}>
                 <Button title="Logout" onPress={logoutUser} />
             </View>
@@ -66,6 +88,7 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 24,
+        fontWeight: 'bold',
         textAlign: 'center',
     },
     button: {
