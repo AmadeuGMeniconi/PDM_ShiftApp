@@ -6,7 +6,7 @@ import auth from '@react-native-firebase/auth';
 import { firebase } from '@react-native-firebase/database';
 
 // Redux
-import { addUser } from '../redux/reducers/currentUserSlice';
+import { clearCurrentUser, setCurrentUser } from '../redux/reducers/currentUserSlice';
 import { useDispatch } from 'react-redux';
 
 // Navigation
@@ -26,7 +26,7 @@ const LoginScreen = () => {
   const saveUserInSlice = (uid) => {
     firebase.database().ref(`users/${uid}`).once('value', snapshot => {
       const data = snapshot.val();
-      dispatch(addUser(data));
+      dispatch(setCurrentUser(data));
     });
   }
 
@@ -82,6 +82,14 @@ const LoginScreen = () => {
 
   };
 
+  const logoutUser = () => {
+    auth().signOut().then(() => {
+      console.log('User signed out!');
+      dispatch(clearCurrentUser());
+      navigator.navigate('Login');
+    });
+  };
+
   return (
     <View style={styles.wrapper}>
       <TextInput style={styles.input}
@@ -108,13 +116,15 @@ const LoginScreen = () => {
             />
           </View>
           :
-          <View style={styles.buttonContainer}>
-            <Button
-              onPress={() => loginUser(email, password)}
-              title={'Sign In'}
-            />
-
+          <View style={styles.buttonContainer} >
+            <View style={styles.button}>
+              <Button title={'Sign In'} onPress={() => loginUser(email, password)} />
+            </View>
+            <View style={styles.button}>
+              <Button title="Logout" onPress={logoutUser} />
+            </View>
           </View>
+
       }
       {
         error &&
@@ -143,7 +153,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   buttonContainer: {
-    margin: 20
+    margin: 20,
+  },
+  button: {
+    margin: 5
   },
   errorBox: {
     display: 'flex',
