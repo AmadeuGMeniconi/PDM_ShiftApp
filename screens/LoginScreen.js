@@ -3,7 +3,7 @@ import { Button, Dimensions, TextInput, View, StyleSheet, Alert, ActivityIndicat
 
 // Services
 import auth from '@react-native-firebase/auth';
-import { firebase } from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
 
 // Redux
 import { clearCurrentUser, setCurrentUser } from '../redux/reducers/currentUserSlice';
@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 
 // Navigation
 import { useNavigation } from '@react-navigation/native';
+import { addFirestoreUser, getFirestoreUser } from '../services/firebase';
 
 const LoginScreen = () => {
 
@@ -23,64 +24,47 @@ const LoginScreen = () => {
   const [error, setError] = useState('');
 
 
-  const saveUserInSlice = (uid) => {
-    firebase.database().ref(`users/${uid}`).once('value', snapshot => {
-      const data = snapshot.val();
-      dispatch(setCurrentUser(data));
-    });
-  }
-
-  const saveUserInFirebaseDatabase = (user) => {
-    const { email, uid } = user;
-    let userToSaveOnDatabase;
-    if (email === 'admin@email.com') {
-      userToSaveOnDatabase = { email: email, id: uid, role: 'ADMIN' };
-    } else {
-      userToSaveOnDatabase = { email: email, id: uid, role: 'CLIENT' };
-    }
-
-    firebase.app().database()
-      .ref(`/users/${uid}`)
-      .set(userToSaveOnDatabase)
-      .then(() => {
-        ToastAndroid.show('User added to Database', ToastAndroid.SHORT);
-        saveUserInSlice(uid);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const saveUserInSlice = (user) => {
+    getFirestoreUser(user).then((u) => dispatch(setCurrentUser(u.data())))
   };
 
-  const loginUser = (email, password) => {
+  const signInUser = (email, password) => {
     if (email && password) {
       setIsLoading(true);
       auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
-          saveUserInSlice(userCredential.user.uid);
+          saveUserInSlice(userCredential.user);
           setIsLoading(false);
           setError('');
           navigator.navigate('Auth');
         })
         .catch((error) => {
-          // console.log("login falhou:  " + error);
-          auth().createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-              ToastAndroid.show('User created!', ToastAndroid.SHORT);
-              saveUserInFirebaseDatabase(userCredential.user);
-              setIsLoading(false);
-              setError('');
-              navigator.navigate('Auth');
-            })
-            .catch(error => {
-              setIsLoading(false);
-              setError(error.message);
-            });
+          setIsLoading(false);
+          setError(error.message);
         });
     } else {
       Alert.alert('Insert email & password')
     }
-
   };
+
+  const signUpUser = (email, password) => {
+    if (email && password) {
+      setIsLoading(true);
+      auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          ToastAndroid.show('User created!', ToastAndroid.SHORT);
+          addFirestoreUser(userCredential.user)
+          setIsLoading(false);
+          setError('');
+        })
+        .catch(error => {
+          setIsLoading(false);
+          setError(error.message);
+        });
+    } else {
+      Alert.alert('Insert email & password')
+    }
+  }
 
   const logoutUser = () => {
     auth().signOut().then(() => {
@@ -118,11 +102,14 @@ const LoginScreen = () => {
           :
           <View style={styles.buttonContainer} >
             <View style={styles.button}>
-              <Button title={'Sign In'} onPress={() => loginUser(email, password)} />
+              <Button title={'Sign Up'} onPress={() => signUpUser(email, password)} />
             </View>
-            {/* <View style={styles.button}>
+            <View style={styles.button}>
+              <Button title={'Sign In'} onPress={() => signInUser(email, password)} />
+            </View>
+            <View style={styles.button}>
               <Button title="Logout" onPress={logoutUser} />
-            </View> */}
+            </View>
           </View>
 
       }

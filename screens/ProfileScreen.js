@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // Component
 import Label from '../components/Label';
+import { updateFirestoreUserName } from '../services/firebase';
 
 
 const ProfileScreen = () => {
@@ -35,13 +36,8 @@ const ProfileScreen = () => {
         setIsEditName(false);
         setIsLoading(true);
         dispatch(changeCurrentUserName(value));
-        firebase.app().database()
-            .ref(`/users/${currentUser.id}/name`)
-            .set(value)
-            .then(() => {
-                setIsLoading(false);
-                ToastAndroid.show('Username updated', ToastAndroid.SHORT);
-            })
+        updateFirestoreUserName(currentUser, value)
+            .then(() => setIsLoading(false))
     };
 
     const logOutUser = () => {
@@ -53,19 +49,8 @@ const ProfileScreen = () => {
     };
 
     const deleteUser = () => {
-        setIsLoading(true);
-        firebase.app().database()
-            .ref(`/users/${currentUser.id}`)
-            .remove()
-            .then(() => {
-                ToastAndroid.show('User data removed', ToastAndroid.SHORT);
-                auth().currentUser.delete().then(() => {
-                    dispatch(clearCurrentUser());
-                    ToastAndroid.show('User deleted', ToastAndroid.SHORT)
-                    navigator.navigate('Login');
-                    setIsLoading(false);
-                });
-            })
+        // setIsLoading(true);
+
     };
 
     // Render
@@ -75,7 +60,7 @@ const ProfileScreen = () => {
             {!isEditName ?
                 <View>
                     <View style={styles.formContainer}>
-                        <Label value={currentUser.id} title='UID' />
+                        <Label value={currentUser.uid} title='UID' />
                         <Label value={currentUser.role} title='ROLE' />
                         <Label value={currentUser.name} title='USERNAME' />
                     </View>
@@ -89,7 +74,7 @@ const ProfileScreen = () => {
                 :
                 <View >
                     <View style={styles.formContainer}>
-                        <Label value={currentUser.id} title='UID' />
+                        <Label value={currentUser.uid} title='UID' />
                         <Label value={currentUser.role} title='ROLE' />
                         <Text style={styles.title}>USERNAME</Text>
                         <TextInput
@@ -118,7 +103,7 @@ const ProfileScreen = () => {
                     </View>
                     :
                     <View style={styles.buttonContainer}>
-                        <Button title="Delete user" onPress={deleteUser} />
+                        {/* <Button title="Delete user" onPress={deleteUser} /> */}
                     </View>}
                 <View style={styles.buttonContainer}>
                     <Button title="Logout" onPress={logOutUser} />
@@ -131,7 +116,7 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
     wrapper: {
         display: 'flex',
-        flex: 1,
+
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#EFEFEF',
@@ -156,10 +141,10 @@ const styles = StyleSheet.create({
         margin: 5
     },
     buttonContainer: {
-        marginTop: 20,
+        margin: 5
     },
     logOutButtonContainer: {
-        flex: 1,
+
         justifyContent: 'flex-end',
 
     }

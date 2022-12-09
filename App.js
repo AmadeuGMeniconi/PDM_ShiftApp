@@ -20,7 +20,7 @@ const App = () => {
   const Stack = createNativeStackNavigator();
 
   useEffect(() => {
-    console.log('App mounted');
+    console.log('# --------- APP MOUNTED --------- #');
     initFirebase();
     initCheckAuthState();
   }, []);

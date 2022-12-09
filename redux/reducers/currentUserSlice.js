@@ -1,10 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+
 const initialState = {
   email: '',
-  id: '',
+  uid: '',
   name: '',
   role: '',
+  tasks: []
 };
 
 export const currentUserSlice = createSlice({
@@ -13,16 +15,22 @@ export const currentUserSlice = createSlice({
   reducers: {
     setCurrentUser: (state, action) => {
       state.email = action.payload.email;
-      state.id = action.payload.id;
+      state.uid = action.payload.uid;
       state.name = action.payload.name;
       state.role = action.payload.role;
+      state.tasks = action.payload.tasks;
       console.log('Redux: ', state)
     },
     clearCurrentUser: state => {
       state.email = '';
-      state.id = '';
+      state.uid = '';
       state.name = '';
       state.role = '';
+      state.tasks = []
+      console.log('Redux: ', state)
+    },
+    setCurrentUserTasks: (state, action) => {
+      state.tasks = action.payload;
       console.log('Redux: ', state)
     },
     changeCurrentUserRole: (state, action) => {
@@ -36,7 +44,9 @@ export const currentUserSlice = createSlice({
   },
 });
 
+
+
 // Action creators are generated for each case reducer function
-export const { setCurrentUser, changeCurrentUserRole, changeCurrentUserName, clearCurrentUser } = currentUserSlice.actions;
+export const { setCurrentUserTasks, setCurrentUser, changeCurrentUserRole, changeCurrentUserName, clearCurrentUser } = currentUserSlice.actions;
 
 export default currentUserSlice.reducer;
