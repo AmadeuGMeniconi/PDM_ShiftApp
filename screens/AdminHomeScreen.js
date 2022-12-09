@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Button, FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 // Navigation
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,21 +20,8 @@ const AdminHomeScreen = () => {
 
     const [userList, setUserList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [task, setTask] = useState({ date: '01/01/01', description: 'sjsjs', isDone: false, title: 'task2' })
-
-
-    const pushUserToList = async (user) => {
-
-        if (!userList.includes(user)) {
-            let list = userList
-            list.push(user)
-            console.log('User: ', user)
-
-            setUserList(list)
-            console.log('UserList: ', userList)
-        }
-
-    }
+    const [task, setTask] = useState()
+    const [modalVisible, setModalVisible] = useState(false)
 
     const addTask = (user) => {
         setIsLoading(true)
@@ -42,6 +29,7 @@ const AdminHomeScreen = () => {
             setIsLoading(false)
         })
     }
+
 
     const userCardItem = ({ item }) => (
         <TouchableOpacity >
@@ -52,9 +40,7 @@ const AdminHomeScreen = () => {
         </TouchableOpacity>
     )
 
-    realTimeFirestoreAllWorkerUsers(pushUserToList, setIsLoading)
-
-
+    realTimeFirestoreAllWorkerUsers(setUserList, setIsLoading)
 
     // Render
     return (
@@ -76,6 +62,7 @@ const AdminHomeScreen = () => {
                     />
                 </View>}
 
+
         </View>
     );
 }
@@ -96,6 +83,11 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold'
     },
+    modal: {
+        flex: 1,
+        alignSelf: 'center',
+
+    }
 });
 
 export default AdminHomeScreen;

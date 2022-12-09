@@ -137,7 +137,9 @@ const styles = StyleSheet.create({
     width: 200,
     borderRadius: 5,
     margin: 5,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: '#ddd'
   },
   buttonContainer: {
     margin: 20,

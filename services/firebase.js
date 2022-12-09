@@ -22,7 +22,7 @@ export const initCheckAuthState = () => {
   console.log('Checking auth state...');
   auth().onAuthStateChanged(user => {
     if (user) {
-      if (user.email === 'admin@gmail.com') {
+      if (user.email === 'admin@email.com') {
         console.log('- Administrator is signed in');
       } else {
         console.log('- Worker is signed in');
@@ -85,7 +85,6 @@ export const getFirestoreUser = async (user) => {
 // }
 
 
-
 export const addTaskToFirebaseUser = async (user, task) => {
   ToastAndroid.show(`Tasks added to ${user.email} Document`, ToastAndroid.SHORT);
   firestore().collection('users').doc(`${user.uid}`)
@@ -107,15 +106,17 @@ export const realTimeFirestoreUser = (user) => {
   }, [user]);
 }
 
-export const realTimeFirestoreAllWorkerUsers = (callbackPush, callbackLoading) => {
+export const realTimeFirestoreAllWorkerUsers = (callbackSetUserList, callbackSetIsLoading) => {
   useEffect(() => {
-    callbackLoading(true)
+    callbackSetIsLoading(true) //callback sets isLoading state to true
     const unsubscribe = firestore().collection(`users`)
       .onSnapshot(collectionSnapshot => {
+        const list = [] //for each doc in 'users' collection, push that doc.data() to list
         collectionSnapshot.docs.forEach(user => {
-          if (user.data().role !== 'ADMIN') callbackPush(user.data());
+          if (user.data().role !== 'ADMIN' && !list.includes(user)) list.push(user.data());
         });
-        callbackLoading(false)
+        callbackSetUserList(list) //callback recieves a list of all users data that are not admins as argument
+        callbackSetIsLoading(false) //callback sets isLoading state to false
       });
 
     // Stop listening for updates when no longer required
