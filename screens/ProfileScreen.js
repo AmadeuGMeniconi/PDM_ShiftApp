@@ -69,12 +69,10 @@ const ProfileScreen = () => {
                     <View style={styles.buttonContainer}>
                         <Button title="Change Name" onPress={() => setIsEditName(true)} />
                     </View>
-
-
                 </View>
                 :
                 <View >
-                    <View style={styles.formContainer}>
+                    <View >
                         <Label value={currentUser.uid} title='UID' />
                         <Label value={currentUser.role} title='ROLE' />
                         <Text style={styles.title}>USERNAME</Text>
@@ -85,10 +83,10 @@ const ProfileScreen = () => {
                             value={userName}
                             onChangeText={userName => setUserName(userName)}
                         />
-                        <View style={styles.buttonContainer}>
+                        <View style={styles.buttonContainer} >
                             <Button title="Confirm" onPress={() => updateUserName(userName)} />
                         </View>
-                        <View style={styles.buttonContainer}>
+                        <View style={styles.buttonContainer} >
                             <Button title="Cancel" onPress={() => setIsEditName(false)} />
                         </View>
 
@@ -106,12 +104,12 @@ const ProfileScreen = () => {
                     <View style={styles.buttonContainer}>
                         {/* <Button title="Delete user" onPress={deleteUser} /> */}
                     </View>}
-                <View style={styles.buttonContainer}>
-                    <Button title="Logout" onPress={logOutUser} />
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Button title="Delete" onPress={deleteUser} />
-                </View>
+                <TouchableOpacity style={styles.logOutButton} onPress={logOutUser}>
+                    <Text style={styles.buttonText} >LOGOUT</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.deleteButton} onPress={deleteUser}>
+                    <Text style={styles.buttonText} >DELETE</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -136,7 +134,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         height: 40,
         borderRadius: 30,
-        marginBottom: 45,
+        marginBottom: 10,
         backgroundColor: 'white',
     },
     title: {
@@ -145,12 +143,30 @@ const styles = StyleSheet.create({
         margin: 5
     },
     buttonContainer: {
-        margin: 5
+        margin: 5,
     },
     logOutButtonContainer: {
-
-        justifyContent: 'flex-end',
-
+        marginTop: 40
+    },
+    logOutButton: {
+        backgroundColor: '#3399ff',
+        textAlign: 'center',
+        marginVertical: 8,
+        width: '100%',
+        borderRadius: 5,
+        elevation: 3
+    },
+    deleteButton: {
+        backgroundColor: '#ff4444',
+        textAlign: 'center',
+        marginTop: 80,
+        borderRadius: 5,
+        elevation: 3
+    },
+    buttonText: {
+        textAlign: 'center',
+        color: 'white',
+        padding: 10
     }
 
 });
