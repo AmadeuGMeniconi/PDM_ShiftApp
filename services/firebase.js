@@ -68,42 +68,50 @@ export const getFirestoreUser = async (user) => {
     .get()
 }
 
-// export const addTaskToFirebaseUser = async (user) => {
-//   ToastAndroid.show(`Task added to ${user.email} Tasks Collection`, ToastAndroid.SHORT);
-//   firestore().collection('users').doc(`${user.uid}`)
-//     .collection('tasks')
-//     .add({
-//       title: 'Task1',
-//       date: '01/01/01'
-//     }).then((data) => {
-//       let taskUid = data.path.split('/').slice(-1).toString();
-//       firestore().collection('users').doc(`${user.uid}`)
-//         .collection('tasks').doc(`${taskUid}`).update({
-//           uid: taskUid
-//         })
-//     });
-// }
-
-
 export const addTaskToFirebaseUser = async (user, task) => {
-  ToastAndroid.show(`Tasks added to ${user.email} Document`, ToastAndroid.SHORT);
+  ToastAndroid.show(`Task added to ${user.email} Document`, ToastAndroid.SHORT);
+  const arrayUnion = firestore.FieldValue.arrayUnion(task)
   firestore().collection('users').doc(`${user.uid}`)
     .update({
-      tasks: firestore.FieldValue.arrayUnion(task)
+      tasks: arrayUnion
     })
 }
 
-export const realTimeFirestoreUser = (user) => {
+// export const updateTaskFromFirebaseUser = async (user, task) => {
+//   ToastAndroid.show(`Task updated in ${user.email} Document`, ToastAndroid.SHORT);
+//   const arrayUnion = firestore.FieldValue.arrayUnion(task)
+//   firestore().collection('users').doc(`${user.uid}`)
+//     .update({
+//       tasks: arrayUnion.isEqual
+//     })
+//   // firestore().collection('users').doc(`${user.uid}`).onSnapshot(snap => {
+//   //   firestore().doc(`${user.id}`).update({
+//   //     tasks: firebase.firestore.FieldValue.arrayUnion(
+//   //       snap.data().tasks.filter(field => field.isDone == task.isDone))
+//   //   })
+//   // })
+// }
+
+export const removeTaskFromFirebaseUser = async (user, task) => {
+  ToastAndroid.show(`Task removed from ${user.email} Document`, ToastAndroid.SHORT);
+  const arrayRemove = firestore.FieldValue.arrayRemove(task)
+  firestore().collection('users').doc(`${user.uid}`)
+    .update({
+      tasks: arrayRemove
+    })
+}
+
+export const realTimeFirestoreUser = (user, callbackDispatch, callbackSet) => {
   useEffect(() => {
     const unsubscribe = firestore().collection(`users`)
       .doc(`${user.uid}`)
       .onSnapshot(documentSnapshot => {
         console.log('User data: ', documentSnapshot.data());
+        callbackDispatch(callbackSet(documentSnapshot.data()))
       });
-
     // Stop listening for updates when no longer required
     return () => unsubscribe();
-  }, [user]);
+  }, []);
 }
 
 export const realTimeFirestoreAllWorkerUsers = (callbackSetUserList, callbackSetIsLoading) => {
