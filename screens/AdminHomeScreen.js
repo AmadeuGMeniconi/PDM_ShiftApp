@@ -24,7 +24,6 @@ const AdminHomeScreen = () => {
     const [modalVisible, setModalVisible] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
 
-    console.log(targetUser)
 
     const taskListItem = ({ item }) => (
         <TouchableOpacity style={styles.taskListItem} >

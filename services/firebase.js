@@ -101,13 +101,14 @@ export const removeTaskFromFirebaseUser = async (user, task) => {
     })
 }
 
-export const realTimeFirestoreUser = (user, callbackDispatch, callbackSet) => {
+export const realTimeFirestoreUser = async (user, dispatch, callbackSet) => {
   useEffect(() => {
     const unsubscribe = firestore().collection(`users`)
       .doc(`${user.uid}`)
       .onSnapshot(documentSnapshot => {
-        console.log('User data: ', documentSnapshot.data());
-        callbackDispatch(callbackSet(documentSnapshot.data()))
+        console.log(documentSnapshot.get('tasks'))
+        dispatch(callbackSet(documentSnapshot.get('tasks')));
+
       });
     // Stop listening for updates when no longer required
     return () => unsubscribe();

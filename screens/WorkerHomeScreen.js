@@ -28,7 +28,7 @@ const WorkerHomeScreen = () => {
         removeTaskFromFirebaseUser(currentUser, task)
     }
 
-    realTimeFirestoreUser(currentUser, dispatch, setCurrentUser)
+    realTimeFirestoreUser(currentUser, dispatch, setCurrentUserTasks)
 
 
     const taskListItem = ({ item }) => (

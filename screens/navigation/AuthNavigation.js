@@ -23,7 +23,7 @@ const AuthNavigation = () => {
 
   return (
 
-    <Tab.Navigator initialRouteName='AdminHome'>
+    <Tab.Navigator initialRouteName='Profile'>
 
       {currentUser.role === 'ADMIN' ?
         <Tab.Screen name="AdminHome" component={AdminHomeScreen} options={{
