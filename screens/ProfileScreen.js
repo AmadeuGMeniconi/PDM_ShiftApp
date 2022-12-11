@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // Component
 import Label from '../components/Label';
-import { updateFirestoreUserName } from '../services/firebase';
+import { deleteAuthUser, deleteUser, updateFirestoreUserName } from '../services/firebase';
 
 
 const ProfileScreen = () => {
@@ -49,9 +49,10 @@ const ProfileScreen = () => {
     };
 
     const deleteUser = () => {
-        // setIsLoading(true);
-
-    };
+        deleteAuthUser().then(() => {
+            navigator.navigate('Login')
+        })
+    }
 
     // Render
     return (
@@ -107,6 +108,9 @@ const ProfileScreen = () => {
                     </View>}
                 <View style={styles.buttonContainer}>
                     <Button title="Logout" onPress={logOutUser} />
+                </View>
+                <View style={styles.buttonContainer}>
+                    <Button title="Delete" onPress={deleteUser} />
                 </View>
             </View>
         </View>

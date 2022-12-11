@@ -2,7 +2,7 @@ import { firebase } from "@react-native-firebase/app";
 import firestore from '@react-native-firebase/firestore'
 import auth from "@react-native-firebase/auth";
 import { useEffect } from "react";
-import { ToastAndroid } from "react-native";
+import { Alert, ToastAndroid } from "react-native";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCJZAbbmTVasQT621p9ASTdIt_NtYJZUbM",
@@ -33,6 +33,19 @@ export const initCheckAuthState = () => {
   });
 };
 
+
+export const deleteAuthUser = async () => {
+  const user = auth().currentUser
+  removeFirestoreUser(user)
+  user.delete().then(() => {
+
+  })
+    .catch((error) => {
+      Alert.alert(error)
+    });
+}
+
+
 // Firestore
 export const addFirestoreUser = async (user) => {
   if (user.email === 'admin@email.com') {
@@ -52,6 +65,11 @@ export const addFirestoreUser = async (user) => {
         role: 'WORKER',
       });
   }
+}
+
+export const removeFirestoreUser = async (user) => {
+  ToastAndroid.show('Admin added to Firestore Collection', ToastAndroid.SHORT);
+  return firestore().collection('users').doc(`${user.uid}`).delete()
 }
 
 export const updateFirestoreUserName = async (user, name) => {
@@ -77,20 +95,6 @@ export const addTaskToFirebaseUser = async (user, task) => {
     })
 }
 
-// export const updateTaskFromFirebaseUser = async (user, task) => {
-//   ToastAndroid.show(`Task updated in ${user.email} Document`, ToastAndroid.SHORT);
-//   const arrayUnion = firestore.FieldValue.arrayUnion(task)
-//   firestore().collection('users').doc(`${user.uid}`)
-//     .update({
-//       tasks: arrayUnion.isEqual
-//     })
-//   // firestore().collection('users').doc(`${user.uid}`).onSnapshot(snap => {
-//   //   firestore().doc(`${user.id}`).update({
-//   //     tasks: firebase.firestore.FieldValue.arrayUnion(
-//   //       snap.data().tasks.filter(field => field.isDone == task.isDone))
-//   //   })
-//   // })
-// }
 
 export const removeTaskFromFirebaseUser = async (user, task) => {
   ToastAndroid.show(`Task removed from ${user.email} Document`, ToastAndroid.SHORT);

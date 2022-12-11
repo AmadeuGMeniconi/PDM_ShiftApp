@@ -107,9 +107,9 @@ const LoginScreen = () => {
             <View style={styles.button}>
               <Button title={'Sign In'} onPress={() => signInUser(email, password)} />
             </View>
-            <View style={styles.button}>
+            {/* <View style={styles.button}>
               <Button title="Logout" onPress={logoutUser} />
-            </View>
+            </View> */}
           </View>
 
       }
