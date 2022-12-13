@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 // Navigation
@@ -24,6 +24,9 @@ const AdminHomeScreen = () => {
     const [modalVisible, setModalVisible] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
 
+    useEffect(() => {
+        realTimeFirestoreAllWorkerUsers(setUserList, setIsLoading);
+    }, []);
 
     const taskListItem = ({ item }) => (
         <TouchableOpacity style={styles.taskListItem} >
@@ -58,7 +61,7 @@ const AdminHomeScreen = () => {
         </TouchableOpacity>
     )
 
-    realTimeFirestoreAllWorkerUsers(setUserList, setIsLoading)
+
 
     // Render
     return (

@@ -107,32 +107,29 @@ export const removeTaskFromFirebaseUser = async (user, task) => {
 };
 
 export const realTimeFirestoreUser = async (user, dispatch, callbackSet) => {
-  useEffect(() => {
-    const unsubscribe = firestore().collection(`users`)
-      .doc(`${user.uid}`)
-      .onSnapshot(documentSnapshot => {
-        console.log(documentSnapshot.get('tasks'))
-        dispatch(callbackSet(documentSnapshot.get('tasks')));
-      });
-    // Stop listening for updates when no longer required
-    return () => unsubscribe();
-  }, []);
+  const unsubscribe = firestore().collection(`users`)
+    .doc(`${user.uid}`)
+    .onSnapshot(documentSnapshot => {
+      console.log(documentSnapshot.get('tasks'))
+      dispatch(callbackSet(documentSnapshot.get('tasks')));
+    });
+  // Stop listening for updates when no longer required
+  return () => unsubscribe();
 }
 
 export const realTimeFirestoreAllWorkerUsers = (callbackSetUserList, callbackSetIsLoading) => {
-  useEffect(() => {
-    callbackSetIsLoading(true); //callback sets isLoading state to true
-    const unsubscribe = firestore().collection(`users`)
-      .onSnapshot(collectionSnapshot => {
-        const list = [] //for each doc in 'users' collection, push that doc.data() to list
-        collectionSnapshot.docs.forEach(user => {
-          if (user.data().email !== ADMIN_EMAIL && !list.includes(user)) list.push(user.data());
-        });
-        callbackSetUserList(list); //callback recieves a list of all users data that are not admins as argument
-        callbackSetIsLoading(false); //callback sets isLoading state to false
+  callbackSetIsLoading(true); //callback sets isLoading state to true
+  const unsubscribe = firestore().collection(`users`)
+    .onSnapshot(collectionSnapshot => {
+      const list = [] //for each doc in 'users' collection, push that doc.data() to list
+      collectionSnapshot.docs.forEach(user => {
+        if (user.data().email !== ADMIN_EMAIL && !list.includes(user)) list.push(user.data());
       });
+      callbackSetUserList(list); //callback recieves a list of all users data that are not admins as argument
+      callbackSetIsLoading(false); //callback sets isLoading state to false
+    });
 
-    // Stop listening for updates when no longer required
-    return () => unsubscribe();
-  }, []);
+  // Stop listening for updates when no longer required
+  return () => unsubscribe();
+
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 // Redux
@@ -21,8 +21,10 @@ const WorkerHomeScreen = () => {
 
     const markTaskAsDone = (task) => removeTaskFromFirebaseUser(currentUser, task);
 
+    useEffect(() => {
+        realTimeFirestoreUser(currentUser, dispatch, setCurrentUserTasks);
+    }, []);
 
-    realTimeFirestoreUser(currentUser, dispatch, setCurrentUserTasks);
 
     const taskListItem = ({ item }) => (
         <TouchableOpacity style={styles.taskListItem} >

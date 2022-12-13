@@ -28,7 +28,7 @@ const ProfileScreen = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        setUserName('')
+        setUserName('');
     }, [currentUser.name]);
 
     const updateUserName = (value) => {
