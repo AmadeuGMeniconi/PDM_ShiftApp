@@ -15,7 +15,6 @@ import { store } from './redux/store';
 import Login from './screens/LoginScreen';
 import AuthNavigation from './screens/navigation/AuthNavigation';
 
-import MyIcons from './icons/MyIcons';
 
 const App = () => {
 

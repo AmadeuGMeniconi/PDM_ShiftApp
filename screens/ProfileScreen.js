@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 // Navigation
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 // Services
-import { firebase } from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 
 // Redux
@@ -14,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // Component
 import Label from '../components/Label';
-import { deleteAuthUser, deleteUser, updateFirestoreUserName } from '../services/firebase';
+import { deleteAuthUser, updateFirestoreUserName } from '../services/firebase';
 
 
 const ProfileScreen = () => {
@@ -43,8 +42,8 @@ const ProfileScreen = () => {
     const logOutUser = () => {
         auth().signOut().then(() => {
             console.log('User signed out!');
-            dispatch(clearCurrentUser());
             navigator.navigate('Login');
+            dispatch(clearCurrentUser());
         });
     };
 
@@ -94,22 +93,18 @@ const ProfileScreen = () => {
                 </View>}
             <View style={styles.logOutButtonContainer}>
                 {isLoading ?
-                    <View >
-                        <ActivityIndicator
-                            size='large'
-                            color='#0F5340'
-                        />
+                    <View>
+                        <ActivityIndicator size='large' color='#0F5340' />
                     </View>
                     :
                     <View style={styles.buttonContainer}>
-                        {/* <Button title="Delete user" onPress={deleteUser} /> */}
+                        <TouchableOpacity style={styles.logOutButton} onPress={logOutUser}>
+                            <Text style={styles.buttonText} >LOGOUT</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.deleteButton} onPress={deleteUser}>
+                            <Text style={styles.buttonText} >DELETE</Text>
+                        </TouchableOpacity>
                     </View>}
-                <TouchableOpacity style={styles.logOutButton} onPress={logOutUser}>
-                    <Text style={styles.buttonText} >LOGOUT</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.deleteButton} onPress={deleteUser}>
-                    <Text style={styles.buttonText} >DELETE</Text>
-                </TouchableOpacity>
             </View>
         </View>
     );

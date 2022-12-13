@@ -3,7 +3,6 @@ import { Button, Dimensions, TextInput, View, StyleSheet, Alert, ActivityIndicat
 
 // Services
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 
 // Redux
 import { clearCurrentUser, setCurrentUser } from '../redux/reducers/currentUserSlice';
@@ -21,11 +20,10 @@ const LoginScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
 
   const saveUserInSlice = (user) => {
-    getFirestoreUser(user).then((u) => dispatch(setCurrentUser(u.data())))
+    getFirestoreUser(user).then((userDoc) => dispatch(setCurrentUser(userDoc.data())))
   };
 
   const signInUser = (email, password) => {
@@ -35,12 +33,10 @@ const LoginScreen = () => {
         .then((userCredential) => {
           saveUserInSlice(userCredential.user);
           setIsLoading(false);
-          setError('');
           navigator.navigate('Auth');
         })
         .catch((error) => {
-          setIsLoading(false);
-          setError(error.message);
+          Alert.alert(error.message)
         });
     } else {
       Alert.alert('Insert email & password')
@@ -55,11 +51,9 @@ const LoginScreen = () => {
           ToastAndroid.show('User created!', ToastAndroid.SHORT);
           addFirestoreUser(userCredential.user)
           setIsLoading(false);
-          setError('');
         })
         .catch(error => {
-          setIsLoading(false);
-          setError(error.message);
+          Alert.alert(error.message)
         });
     } else {
       Alert.alert('Insert email & password')
@@ -83,7 +77,6 @@ const LoginScreen = () => {
         onChangeText={email => setEmail(email)}
         autoCapitalize={'none'}
       />
-
       <TextInput style={styles.input}
         label='Password'
         placeholder='enter password'
@@ -91,34 +84,21 @@ const LoginScreen = () => {
         onChangeText={password => setPassword(password)}
         secureTextEntry
       />
-      {
-        isLoading ?
-          <View style={styles.buttonContainer}>
-            <ActivityIndicator
-              size='large'
-              color='#0F5340'
-            />
-          </View>
-          :
-          <View style={styles.buttonContainer} >
-            <View style={styles.button}>
-              <Button title={'Sign Up'} onPress={() => signUpUser(email, password)} />
-            </View>
-            <View style={styles.button}>
-              <Button title={'Sign In'} onPress={() => signInUser(email, password)} />
-            </View>
-            {/* <View style={styles.button}>
-              <Button title="Logout" onPress={logoutUser} />
-            </View> */}
-          </View>
 
-      }
-      {
-        error &&
-        <View style={styles.errorBox}>
-          <Text style={styles.error}>{error}</Text>
+      {isLoading ?
+        <View style={styles.buttonContainer}>
+          <ActivityIndicator size='large' color='#0F5340' />
         </View>
-      }
+        :
+        <View style={styles.buttonContainer} >
+          <View style={styles.button}>
+            <Button title={'Sign Up'} onPress={() => signUpUser(email, password)} />
+          </View>
+          <View style={styles.button}>
+            <Button title={'Sign In'} onPress={() => signInUser(email, password)} />
+          </View>
+        </View>}
+
     </View>
   )
 }

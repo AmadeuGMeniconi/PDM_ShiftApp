@@ -1,35 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-// Navigation
+// Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
-import { firebase } from '@react-native-firebase/database';
-import { addTasksToUser, addTaskToFirebaseUser, realTimeFirestoreAllWorkerUsers, realTimeFirestoreUser, realTimeFirestoreUserTasks, removeTaskFromFirebaseUser, updateTaskFromFirebaseUser, updateTasksToFirebaseUser } from '../services/firebase';
-import { setCurrentUser, setCurrentUserTasks } from '../redux/reducers/currentUserSlice';
+import { setCurrentUserTasks } from '../redux/reducers/currentUserSlice';
 
+// Services
+import { realTimeFirestoreUser, removeTaskFromFirebaseUser } from '../services/firebase';
 
 
 
 const WorkerHomeScreen = () => {
 
-    const navigatior = useNavigation();
     const dispatch = useDispatch();
-
 
     const currentUser = useSelector(store => store.currentUser);
 
-    const [taskList, setTaskList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [targetTask, setTargetTask] = useState({})
-    const [user, setUser] = useState()
 
-    const markTaskAsDone = (task) => {
-        removeTaskFromFirebaseUser(currentUser, task)
-    }
 
-    realTimeFirestoreUser(currentUser, dispatch, setCurrentUserTasks)
+    const markTaskAsDone = (task) => removeTaskFromFirebaseUser(currentUser, task);
 
+
+    realTimeFirestoreUser(currentUser, dispatch, setCurrentUserTasks);
 
     const taskListItem = ({ item }) => (
         <TouchableOpacity style={styles.taskListItem} >
@@ -46,10 +39,7 @@ const WorkerHomeScreen = () => {
         <View style={styles.wrapper} >
             {isLoading ?
                 <View>
-                    < ActivityIndicator
-                        size='large'
-                        color='#0F5340'
-                    />
+                    < ActivityIndicator size='large' color='#0F5340' />
                 </View >
                 :
                 <FlatList style={styles.taskList}

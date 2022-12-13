@@ -11,6 +11,10 @@ import ProfileScreen from '../ProfileScreen';
 import WorkerHomeScreen from '../WorkerHomeScreen';
 import AdminHomeScreen from '../AdminHomeScreen';
 
+// Services
+import { ADMIN_EMAIL } from '../../services/firebase';
+
+// Font Awesome
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHome, faUser } from '@fortawesome/free-solid-svg-icons'
 
@@ -25,7 +29,7 @@ const AuthNavigation = () => {
 
     <Tab.Navigator initialRouteName='Profile'>
 
-      {currentUser.role === 'ADMIN' ?
+      {currentUser.email === ADMIN_EMAIL ?
         <Tab.Screen name="AdminHome" component={AdminHomeScreen} options={{
           headerTitle: 'USER LIST', headerTitleAlign: 'center', tabBarLabel: () => null, tabBarIcon: ({ focused }) =>
             focused ? (
