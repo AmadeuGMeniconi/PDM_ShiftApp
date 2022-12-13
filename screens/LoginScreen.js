@@ -37,6 +37,7 @@ const LoginScreen = () => {
         })
         .catch((error) => {
           Alert.alert(error.message)
+          setIsLoading(false);
         });
     } else {
       Alert.alert('Insert email & password')
@@ -54,6 +55,7 @@ const LoginScreen = () => {
         })
         .catch(error => {
           Alert.alert(error.message)
+          setIsLoading(false);
         });
     } else {
       Alert.alert('Insert email & password')

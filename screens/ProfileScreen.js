@@ -88,23 +88,25 @@ const ProfileScreen = () => {
                         <View style={styles.buttonContainer} >
                             <Button title="Cancel" onPress={() => setIsEditName(false)} />
                         </View>
-
                     </View>
                 </View>}
+
             <View style={styles.logOutButtonContainer}>
+
                 {isLoading ?
-                    <View>
+                    <>
                         <ActivityIndicator size='large' color='#0F5340' />
-                    </View>
+                    </>
                     :
-                    <View style={styles.buttonContainer}>
+                    <>
                         <TouchableOpacity style={styles.logOutButton} onPress={logOutUser}>
                             <Text style={styles.buttonText} >LOGOUT</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.deleteButton} onPress={deleteUser}>
                             <Text style={styles.buttonText} >DELETE</Text>
                         </TouchableOpacity>
-                    </View>}
+                    </>}
+
             </View>
         </View>
     );
@@ -146,15 +148,13 @@ const styles = StyleSheet.create({
     logOutButton: {
         backgroundColor: '#3399ff',
         textAlign: 'center',
-        marginVertical: 8,
-        width: '100%',
+        marginBottom: 20,
         borderRadius: 5,
         elevation: 3
     },
     deleteButton: {
         backgroundColor: '#ff4444',
         textAlign: 'center',
-        marginTop: 80,
         borderRadius: 5,
         elevation: 3
     },
