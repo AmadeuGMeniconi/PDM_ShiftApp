@@ -19,7 +19,7 @@ export const initFirebase = () => {
   }
 };
 
-export const ADMIN_EMAIL = 'admin@email.com'
+export const ADMIN_EMAIL = 'admin@email.com';
 
 export const initCheckAuthState = () => {
   console.log('Checking auth state...');
@@ -36,7 +36,6 @@ export const initCheckAuthState = () => {
   });
 };
 
-
 export const deleteAuthUser = async () => {
   const user = auth().currentUser
   removeFirestoreUser(user)
@@ -46,8 +45,7 @@ export const deleteAuthUser = async () => {
     .catch((error) => {
       Alert.alert(error)
     });
-}
-
+};
 
 // Firestore
 export const addFirestoreUser = async (user) => {
@@ -68,45 +66,45 @@ export const addFirestoreUser = async (user) => {
         role: 'WORKER',
       });
   }
-}
+};
 
 export const removeFirestoreUser = async (user) => {
   ToastAndroid.show('User removed from Firestore Database', ToastAndroid.SHORT);
-  return firestore().collection('users').doc(`${user.uid}`).delete()
-}
+  return firestore().collection('users').doc(`${user.uid}`).delete();
+};
 
 export const updateFirestoreUserName = async (user, name) => {
   ToastAndroid.show(`User name changed in Firestore Document`, ToastAndroid.SHORT)
   firestore().collection('users').doc(`${user.uid}`)
     .update({
       name: name
-    })
-}
+    });
+};
 
 export const getFirestoreUser = async (user) => {
   return firestore().collection(`users`)
     .doc(`${user.uid}`)
-    .get()
-}
+    .get();
+};
 
 export const addTaskToFirebaseUser = async (user, task) => {
   ToastAndroid.show(`Task added to Firestore Document`, ToastAndroid.SHORT);
-  const arrayUnion = firestore.FieldValue.arrayUnion(task)
+  const arrayUnion = firestore.FieldValue.arrayUnion(task);
   firestore().collection('users').doc(`${user.uid}`)
     .update({
       tasks: arrayUnion
-    })
-}
+    });
+};
 
 
 export const removeTaskFromFirebaseUser = async (user, task) => {
   ToastAndroid.show(`Task removed from Firestore Document`, ToastAndroid.SHORT);
-  const arrayRemove = firestore.FieldValue.arrayRemove(task)
+  const arrayRemove = firestore.FieldValue.arrayRemove(task);
   firestore().collection('users').doc(`${user.uid}`)
     .update({
       tasks: arrayRemove
-    })
-}
+    });
+};
 
 export const realTimeFirestoreUser = async (user, dispatch, callbackSet) => {
   useEffect(() => {
@@ -123,15 +121,15 @@ export const realTimeFirestoreUser = async (user, dispatch, callbackSet) => {
 
 export const realTimeFirestoreAllWorkerUsers = (callbackSetUserList, callbackSetIsLoading) => {
   useEffect(() => {
-    callbackSetIsLoading(true) //callback sets isLoading state to true
+    callbackSetIsLoading(true); //callback sets isLoading state to true
     const unsubscribe = firestore().collection(`users`)
       .onSnapshot(collectionSnapshot => {
         const list = [] //for each doc in 'users' collection, push that doc.data() to list
         collectionSnapshot.docs.forEach(user => {
           if (user.data().email !== ADMIN_EMAIL && !list.includes(user)) list.push(user.data());
         });
-        callbackSetUserList(list) //callback recieves a list of all users data that are not admins as argument
-        callbackSetIsLoading(false) //callback sets isLoading state to false
+        callbackSetUserList(list); //callback recieves a list of all users data that are not admins as argument
+        callbackSetIsLoading(false); //callback sets isLoading state to false
       });
 
     // Stop listening for updates when no longer required

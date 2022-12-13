@@ -36,11 +36,11 @@ const LoginScreen = () => {
           navigator.navigate('Auth');
         })
         .catch((error) => {
-          Alert.alert(error.message)
+          Alert.alert(error.message);
           setIsLoading(false);
         });
     } else {
-      Alert.alert('Insert email & password')
+      Alert.alert('Insert email & password');
     }
   };
 
@@ -50,11 +50,11 @@ const LoginScreen = () => {
       auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
           ToastAndroid.show('User created!', ToastAndroid.SHORT);
-          addFirestoreUser(userCredential.user)
+          addFirestoreUser(userCredential.user);
           setIsLoading(false);
         })
         .catch(error => {
-          Alert.alert(error.message)
+          Alert.alert(error.message);
           setIsLoading(false);
         });
     } else {

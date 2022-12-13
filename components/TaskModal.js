@@ -6,9 +6,7 @@ import { addTaskToFirebaseUser } from '../services/firebase';
 
 const TaskModal = ({ modalVisible, setModalVisible, user }) => {
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState(new Date())
-
-  console.log(description)
+  const [date, setDate] = useState(new Date());
 
   const handleSave = () => {
     addTaskToFirebaseUser(user, {

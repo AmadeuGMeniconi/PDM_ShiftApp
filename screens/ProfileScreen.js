@@ -25,18 +25,18 @@ const ProfileScreen = () => {
 
     const [userName, setUserName] = useState('');
     const [isEditName, setIsEditName] = useState(false);
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         setUserName('')
-    }, [currentUser.name])
+    }, [currentUser.name]);
 
     const updateUserName = (value) => {
         setIsEditName(false);
         setIsLoading(true);
         dispatch(changeCurrentUserName(value));
         updateFirestoreUserName(currentUser, value)
-            .then(() => setIsLoading(false))
+            .then(() => setIsLoading(false));
     };
 
     const logOutUser = () => {
@@ -49,9 +49,9 @@ const ProfileScreen = () => {
 
     const deleteUser = () => {
         deleteAuthUser().then(() => {
-            navigator.navigate('Login')
+            navigator.navigate('Login');
         })
-    }
+    };
 
     // Render
     return (
@@ -115,7 +115,6 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
     wrapper: {
         display: 'flex',
-
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#EFEFEF',
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
         margin: 5,
     },
     logOutButtonContainer: {
-        marginTop: 40
+        marginVertical: 40
     },
     logOutButton: {
         backgroundColor: '#3399ff',

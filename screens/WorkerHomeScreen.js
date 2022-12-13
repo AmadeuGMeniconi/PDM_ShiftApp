@@ -32,7 +32,7 @@ const WorkerHomeScreen = () => {
                 {item.isDone ? <Text style={styles.doneText}>DONE</Text> : <Text style={styles.markDoneText}>MARK AS DONE</Text>}
             </TouchableOpacity>
         </TouchableOpacity>
-    )
+    );
 
     // Render
     return (
