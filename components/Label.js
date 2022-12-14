@@ -1,7 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-
 const Label = ({ value, title, selectable }) => {
   return (
     <View style={styles.labelContainer}>
@@ -12,8 +11,6 @@ const Label = ({ value, title, selectable }) => {
     </View>
   )
 };
-
-export default Label
 
 const styles = StyleSheet.create({
   labelContainer: {
@@ -37,4 +34,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     backgroundColor: 'white',
   },
-})
+});
+
+export default Label;

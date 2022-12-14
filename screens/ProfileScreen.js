@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 // Navigation
 import { useNavigation } from '@react-navigation/native';
@@ -72,7 +72,6 @@ const ProfileScreen = () => {
                 </View>
                 :
                 <View >
-
                     <Label value={currentUser.uid} title='UID' />
                     <Label value={currentUser.role} title='ROLE' />
                     <LabelInput label={'NAME'} placeholder={'username'} value={userName} setUserName={setUserName} />

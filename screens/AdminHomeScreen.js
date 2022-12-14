@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 
-// Navigation
-import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
-
 // Service
 import { realTimeFirestoreAllWorkerUsers, removeTaskFromFirebaseUser } from '../services/firebase';
 
@@ -15,10 +11,6 @@ import UserListItem from '../components/UserListItem';
 
 
 const AdminHomeScreen = () => {
-
-    const navigatior = useNavigation();
-
-    const currentUser = useSelector(store => store.currentUser);
 
     const [userList, setUserList] = useState([]);
     const [targetUser, setTargetUser] = useState({})
@@ -61,13 +53,11 @@ const AdminHomeScreen = () => {
                         renderItem={userListItem}
                         keyExtractor={item => item.uid}
                     />
-
                 </View>}
 
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     wrapper: {

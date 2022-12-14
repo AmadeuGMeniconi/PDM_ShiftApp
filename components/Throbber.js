@@ -12,11 +12,11 @@ const Throbber = ({ size = 'large', color = colors.theme1.aquamarine }) => {
   )
 };
 
-export default Throbber
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 20,
   },
-})
+});
+
+export default Throbber;
