@@ -1,21 +1,29 @@
 import React, { useState } from 'react'
-// import PropTypes from 'prop-types'
-import { Modal, View, Text, TouchableHighlight, StyleSheet, TextInput, Alert } from 'react-native';
+import { Modal, View, Text, StyleSheet, TextInput, Alert } from 'react-native';
+
+// Date Picker
 import DatePicker from 'react-native-date-picker'
+import { colors } from '../colors/MyColors';
+
+// Services
 import { addTaskToFirebaseUser } from '../services/firebase';
 
-const TaskModal = ({ modalVisible, setModalVisible, user }) => {
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState(new Date())
+// Component
+import SimpleButton from './SimpleButton';
 
-  console.log(description)
+
+const TaskModal = ({ modalVisible, setModalVisible, user }) => {
+
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState(new Date());
 
   const handleSave = () => {
     addTaskToFirebaseUser(user, {
       description: description,
-      date: date.toDateString(),
-      isDone: false,
+      date: date.toISOString(),
+      isDone: false
     }).then(() => {
+      setDescription('');
       setModalVisible(false);
     }).catch((error) => console.log(error));
   };
@@ -37,35 +45,18 @@ const TaskModal = ({ modalVisible, setModalVisible, user }) => {
             label='description'
             placeholder='Task Description'
             value={description}
-            onChangeText={description => setDescription(description)}
+            onChangeText={text => setDescription(text)}
           />
-          <DatePicker date={date} mode="datetime" onDateChange={setDate} />
+          <DatePicker date={date} mode="date" onDateChange={setDate} />
           <View style={styles.buttonContainer}>
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}
-            >
-              <Text style={styles.textStyle}>Cancel</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-              onPress={() => handleSave()}
-            >
-              <Text style={styles.textStyle}>Create Task</Text>
-            </TouchableHighlight>
+            <SimpleButton elevation={5} onPress={() => handleSave()} title={'CREATE'} />
+            <SimpleButton elevation={5} onPress={() => setModalVisible(!modalVisible)} title={'CANCEL'} color={colors.theme1.lightAtomicTangerine} />
           </View>
         </View>
       </View>
     </Modal>
   )
 }
-
-// TaskModal.propTypes = {
-//   modalVisible: PropTypes.bool.isRequired,
-//   setModalVisible: PropTypes.func.isRequired,
-// }
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -75,39 +66,23 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalView: {
-    margin: 20,
+    marginVertical: 20,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
-  },
-  openButton: {
-    backgroundColor: "#F194FF",
-    borderRadius: 20,
-    padding: 10,
-    margin: 10,
-    elevation: 2
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
+    elevation: 10
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: 'bold',
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 10
   },
   input: {
     marginBottom: 10,

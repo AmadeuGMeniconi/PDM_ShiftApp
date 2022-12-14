@@ -1,17 +1,24 @@
 import React, { useState } from 'react'
-import { Button, Dimensions, TextInput, View, StyleSheet, Alert, ActivityIndicator, Text, ToastAndroid } from 'react-native';
+import { TextInput, View, StyleSheet, Alert, ToastAndroid } from 'react-native';
 
 // Services
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 
 // Redux
-import { clearCurrentUser, setCurrentUser } from '../redux/reducers/currentUserSlice';
+import { setCurrentUser } from '../redux/reducers/currentUserSlice';
 import { useDispatch } from 'react-redux';
 
 // Navigation
 import { useNavigation } from '@react-navigation/native';
 import { addFirestoreUser, getFirestoreUser } from '../services/firebase';
+
+// Components
+import SimpleButton from '../components/SimpleButton';
+import Throbber from '../components/Throbber';
+
+// My Colors
+import { colors } from '../colors/MyColors';
+
 
 const LoginScreen = () => {
 
@@ -21,11 +28,10 @@ const LoginScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
 
   const saveUserInSlice = (user) => {
-    getFirestoreUser(user).then((u) => dispatch(setCurrentUser(u.data())))
+    getFirestoreUser(user).then((userDoc) => dispatch(setCurrentUser(userDoc.data())));
   };
 
   const signInUser = (email, password) => {
@@ -35,15 +41,14 @@ const LoginScreen = () => {
         .then((userCredential) => {
           saveUserInSlice(userCredential.user);
           setIsLoading(false);
-          setError('');
           navigator.navigate('Auth');
         })
         .catch((error) => {
+          Alert.alert(error.message);
           setIsLoading(false);
-          setError(error.message);
         });
     } else {
-      Alert.alert('Insert email & password')
+      Alert.alert('Insert email & password');
     }
   };
 
@@ -53,117 +58,63 @@ const LoginScreen = () => {
       auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
           ToastAndroid.show('User created!', ToastAndroid.SHORT);
-          addFirestoreUser(userCredential.user)
+          addFirestoreUser(userCredential.user);
           setIsLoading(false);
-          setError('');
         })
         .catch(error => {
+          Alert.alert(error.message);
           setIsLoading(false);
-          setError(error.message);
         });
     } else {
       Alert.alert('Insert email & password')
     }
-  }
-
-  const logoutUser = () => {
-    auth().signOut().then(() => {
-      console.log('User signed out!');
-      dispatch(clearCurrentUser());
-      navigator.navigate('Login');
-    });
   };
 
   return (
     <View style={styles.wrapper}>
       <TextInput style={styles.input}
         label='Email Address'
-        placeholder='enter email'
+        placeholder='email'
         value={email}
         onChangeText={email => setEmail(email)}
         autoCapitalize={'none'}
       />
-
       <TextInput style={styles.input}
         label='Password'
-        placeholder='enter password'
+        placeholder='password'
         value={password}
         onChangeText={password => setPassword(password)}
         secureTextEntry
       />
-      {
-        isLoading ?
-          <View style={styles.buttonContainer}>
-            <ActivityIndicator
-              size='large'
-              color='#0F5340'
-            />
-          </View>
-          :
-          <View style={styles.buttonContainer} >
-            <View style={styles.button}>
-              <Button title={'Sign Up'} onPress={() => signUpUser(email, password)} />
-            </View>
-            <View style={styles.button}>
-              <Button title={'Sign In'} onPress={() => signInUser(email, password)} />
-            </View>
-            {/* <View style={styles.button}>
-              <Button title="Logout" onPress={logoutUser} />
-            </View> */}
-          </View>
 
-      }
-      {
-        error &&
-        <View style={styles.errorBox}>
-          <Text style={styles.error}>{error}</Text>
-        </View>
-      }
+      {isLoading ?
+        <Throbber />
+        :
+        <View style={{ marginTop: 30 }} >
+          <SimpleButton elevation={5} title={'SIGN IN'} onPress={() => signInUser(email, password)} />
+          <SimpleButton elevation={0} textColor={colors.theme1.aquamarine} color={null} title={'SIGN UP'} onPress={() => signUpUser(email, password)} />
+        </View>}
+
     </View>
   )
-}
+};
 
 const styles = StyleSheet.create({
   wrapper: {
-    display: 'flex',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#EFEFEF',
-    paddingVertical: 80,
+    alignContent: 'center',
+    backgroundColor: colors.theme1.lightGray,
+    paddingTop: 80,
     paddingHorizontal: 80,
   },
   input: {
-    width: 200,
-    borderRadius: 5,
-    margin: 5,
+    alignSelf: 'center',
+    width: '100%',
+    paddingHorizontal: 30,
+    borderRadius: 80,
+    marginVertical: 5,
     backgroundColor: 'white',
-    borderWidth: 2,
-    borderColor: '#ddd'
   },
-  buttonContainer: {
-    margin: 20,
-  },
-  button: {
-    margin: 5
-  },
-  errorBox: {
-    display: 'flex',
-    justifyContent: 'center',
-    width: 300,
-    height: 100,
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: 'red',
-    marginTop: 20,
-  },
-  error: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'center',
-    backgroundColor: 'red',
-  }
-})
+});
 
 export default LoginScreen;
