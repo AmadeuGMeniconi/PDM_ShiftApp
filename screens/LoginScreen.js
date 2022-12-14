@@ -1,16 +1,23 @@
 import React, { useState } from 'react'
-import { Button, Dimensions, TextInput, View, StyleSheet, Alert, ActivityIndicator, Text, ToastAndroid } from 'react-native';
+import { TextInput, View, StyleSheet, Alert, ToastAndroid } from 'react-native';
 
 // Services
 import auth from '@react-native-firebase/auth';
 
 // Redux
-import { clearCurrentUser, setCurrentUser } from '../redux/reducers/currentUserSlice';
+import { setCurrentUser } from '../redux/reducers/currentUserSlice';
 import { useDispatch } from 'react-redux';
 
 // Navigation
 import { useNavigation } from '@react-navigation/native';
 import { addFirestoreUser, getFirestoreUser } from '../services/firebase';
+
+// Components
+import SimpleButton from '../components/SimpleButton';
+import Throbber from '../components/Throbber';
+
+// My Colors
+import { colors } from '../styles/MyColors';
 
 const LoginScreen = () => {
 
@@ -23,7 +30,7 @@ const LoginScreen = () => {
 
 
   const saveUserInSlice = (user) => {
-    getFirestoreUser(user).then((userDoc) => dispatch(setCurrentUser(userDoc.data())))
+    getFirestoreUser(user).then((userDoc) => dispatch(setCurrentUser(userDoc.data())));
   };
 
   const signInUser = (email, password) => {
@@ -60,92 +67,53 @@ const LoginScreen = () => {
     } else {
       Alert.alert('Insert email & password')
     }
-  }
-
-  const logoutUser = () => {
-    auth().signOut().then(() => {
-      console.log('User signed out!');
-      dispatch(clearCurrentUser());
-      navigator.navigate('Login');
-    });
   };
 
   return (
     <View style={styles.wrapper}>
       <TextInput style={styles.input}
         label='Email Address'
-        placeholder='enter email'
+        placeholder='email'
         value={email}
         onChangeText={email => setEmail(email)}
         autoCapitalize={'none'}
       />
       <TextInput style={styles.input}
         label='Password'
-        placeholder='enter password'
+        placeholder='password'
         value={password}
         onChangeText={password => setPassword(password)}
         secureTextEntry
       />
 
       {isLoading ?
-        <View style={styles.buttonContainer}>
-          <ActivityIndicator size='large' color='#0F5340' />
-        </View>
+        <Throbber />
         :
-        <View style={styles.buttonContainer} >
-          <View style={styles.button}>
-            <Button title={'Sign Up'} onPress={() => signUpUser(email, password)} />
-          </View>
-          <View style={styles.button}>
-            <Button title={'Sign In'} onPress={() => signInUser(email, password)} />
-          </View>
+        <View style={{ marginTop: 30 }} >
+          <SimpleButton title={'SIGN UP'} onPress={() => signUpUser(email, password)} />
+          <SimpleButton title={'SIGN IN'} onPress={() => signInUser(email, password)} />
         </View>}
 
     </View>
   )
-}
+};
 
 const styles = StyleSheet.create({
   wrapper: {
-    display: 'flex',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#EFEFEF',
-    paddingVertical: 80,
+    alignContent: 'center',
+    backgroundColor: colors.theme1.lightGray,
+    paddingTop: 80,
     paddingHorizontal: 80,
   },
   input: {
-    width: 200,
-    borderRadius: 5,
-    margin: 5,
+    alignSelf: 'center',
+    width: '100%',
+    paddingHorizontal: 30,
+    borderRadius: 80,
+    marginVertical: 5,
     backgroundColor: 'white',
-    borderWidth: 2,
-    borderColor: '#ddd'
   },
-  buttonContainer: {
-    margin: 20,
-  },
-  button: {
-    margin: 5
-  },
-  errorBox: {
-    display: 'flex',
-    justifyContent: 'center',
-    width: 300,
-    height: 100,
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: 'red',
-    marginTop: 20,
-  },
-  error: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'center',
-    backgroundColor: 'red',
-  }
-})
+});
 
 export default LoginScreen;

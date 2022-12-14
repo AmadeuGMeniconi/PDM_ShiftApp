@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
-// import PropTypes from 'prop-types'
 import { Modal, View, Text, TouchableHighlight, StyleSheet, TextInput, Alert } from 'react-native';
+
+// Date Picker
 import DatePicker from 'react-native-date-picker'
+
+// Services
 import { addTaskToFirebaseUser } from '../services/firebase';
 
 const TaskModal = ({ modalVisible, setModalVisible, user }) => {
@@ -60,11 +63,6 @@ const TaskModal = ({ modalVisible, setModalVisible, user }) => {
   )
 }
 
-// TaskModal.propTypes = {
-//   modalVisible: PropTypes.bool.isRequired,
-//   setModalVisible: PropTypes.func.isRequired,
-// }
-
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
@@ -78,13 +76,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
     elevation: 5
   },
   openButton: {

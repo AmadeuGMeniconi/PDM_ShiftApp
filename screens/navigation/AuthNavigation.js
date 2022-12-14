@@ -17,6 +17,7 @@ import { ADMIN_EMAIL } from '../../services/firebase';
 // Font Awesome
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHome, faUser } from '@fortawesome/free-solid-svg-icons'
+import { colors } from '../../styles/MyColors';
 
 
 const AuthNavigation = () => {
@@ -26,39 +27,35 @@ const AuthNavigation = () => {
   const Tab = createBottomTabNavigator();
 
   return (
-
     <Tab.Navigator initialRouteName='Profile'>
 
       {currentUser.email === ADMIN_EMAIL ?
         <Tab.Screen name="AdminHome" component={AdminHomeScreen} options={{
-          headerTitle: 'USER LIST', headerTitleAlign: 'center', tabBarLabel: () => null, tabBarIcon: ({ focused }) =>
+          headerTitle: 'User List', headerTitleAlign: 'center', tabBarLabel: () => null, tabBarIcon: ({ focused }) =>
             focused ? (
-              <FontAwesomeIcon icon={faHome} color={'#2196F3'} size={25} />
+              <FontAwesomeIcon icon={faHome} color={colors.theme1.aquamarine} size={25} />
             ) : (
               <FontAwesomeIcon icon={faHome} color={'#505050'} size={25} />
             )
-        }}
-        />
+        }} />
         :
         <Tab.Screen name="WorkerHome" component={WorkerHomeScreen} options={{
-          headerTitle: 'TASK LIST', headerTitleAlign: 'center', tabBarLabel: () => null, tabBarIcon: ({ focused }) =>
+          headerTitle: 'Task List', headerTitleAlign: 'center', tabBarLabel: () => null, tabBarIcon: ({ focused }) =>
             focused ? (
-              <FontAwesomeIcon icon={faHome} color={'#2196F3'} size={25} />
+              <FontAwesomeIcon icon={faHome} color={colors.theme1.aquamarine} size={25} />
             ) : (
               <FontAwesomeIcon icon={faHome} color={'#505050'} size={25} />
             )
-        }}
-        />}
+        }} />}
 
       <Tab.Screen name="Profile" component={ProfileScreen} options={{
-        headerTitle: 'PROFILE', headerTitleAlign: 'center', tabBarLabel: () => null, tabBarIcon: ({ focused }) =>
+        headerTitle: `Welcome ${currentUser.name}`, headerTitleAlign: 'center', tabBarLabel: () => null, tabBarIcon: ({ focused }) =>
           focused ? (
-            <FontAwesomeIcon icon={faUser} color={'#2196F3'} size={25} />
+            <FontAwesomeIcon icon={faUser} color={colors.theme1.aquamarine} size={25} />
           ) : (
             <FontAwesomeIcon icon={faUser} color={'#505050'} size={25} />
           )
-      }}
-      />
+      }} />
     </Tab.Navigator>
   );
 };

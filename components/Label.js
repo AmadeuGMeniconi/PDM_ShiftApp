@@ -1,12 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 
-const Label = ({ value, title }) => {
+
+const Label = ({ value, title, selectable }) => {
   return (
     <View style={styles.labelContainer}>
 
       <Text style={styles.title}>{title}</Text>
-      <Text selectable={true} style={styles.label}>{value}</Text>
+      <Text selectable={selectable} style={styles.label}>{value}</Text>
 
     </View>
   )
@@ -16,21 +17,24 @@ export default Label
 
 const styles = StyleSheet.create({
   labelContainer: {
-    alignContent: 'center',
-    alignItems: 'center'
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%'
   },
   title: {
-    fontSize: 16,
-    margin: 5
+    flex: 1,
+    fontSize: 14,
   },
   label: {
+    flex: 4,
+    marginVertical: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderRadius: 30,
     textAlign: 'center',
-    marginBottom: 10,
-    width: 350,
-    padding: 10,
-    backgroundColor: 'white',
-    borderRadius: 20,
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 14,
+    backgroundColor: 'white',
   },
 })
