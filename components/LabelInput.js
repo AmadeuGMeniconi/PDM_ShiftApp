@@ -1,5 +1,6 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
+
 
 const LabelInput = ({ label, value, placeholder, setUserName }) => {
   return (

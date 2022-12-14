@@ -7,7 +7,7 @@ export const colors = {
     darkBlueGray: '#586994',
     cyberGrape: '#613F75',
     mistyRose: '#FFE3E0',
-    lightGray: '#EEEEEE',
+    lightGray: '#EFEFEF',
     atomicTangerine: '#FF934F',
     lightAtomicTangerine: '#FFC67F'
   },

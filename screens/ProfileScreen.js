@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 
 // Navigation
 import { useNavigation } from '@react-navigation/native';
@@ -17,9 +17,10 @@ import Label from '../components/Label';
 import SimpleButton from '../components/SimpleButton';
 import Throbber from '../components/Throbber';
 import LabelInput from '../components/LabelInput';
+import ConfirmModal from '../components/ConfirmModal';
 
 // My Colors
-import { colors } from '../styles/MyColors';
+import { colors } from '../colors/MyColors';
 
 
 const ProfileScreen = () => {
@@ -32,6 +33,7 @@ const ProfileScreen = () => {
     const [userName, setUserName] = useState('');
     const [isEditName, setIsEditName] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         setUserName('');
@@ -64,36 +66,40 @@ const ProfileScreen = () => {
         <View style={styles.wrapper}>
 
             {!isEditName ?
-                <View>
+                <View >
                     <Label value={currentUser.uid} title='UID' />
                     <Label value={currentUser.role} title='ROLE' />
                     <Label value={currentUser.name} title='NAME' />
-                    <SimpleButton color={colors.theme1.aquamarine} title={'CHANGE NAME'} onPress={() => setIsEditName(true)} />
+                    <SimpleButton elevation={5} color={colors.theme1.aquamarine} title={'CHANGE NAME'} onPress={() => setIsEditName(true)} />
                 </View>
                 :
                 <View >
                     <Label value={currentUser.uid} title='UID' />
                     <Label value={currentUser.role} title='ROLE' />
-                    <LabelInput label={'NAME'} placeholder={'username'} value={userName} setUserName={setUserName} />
+                    <LabelInput label={'NAME'} placeholder={'Enter Name'} value={userName} setUserName={setUserName} />
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <SimpleButton width={170} color={colors.theme1.aquamarine} title={'CONFIRM'} onPress={() => updateUserName(userName)} />
-                        <SimpleButton width={170} color={colors.theme1.lightAtomicTangerine} title={'CANCEL'} onPress={() => setIsEditName(false)} />
+                        <SimpleButton elevation={5} width={170} color={colors.theme1.aquamarine} title={'CONFIRM'} onPress={() => updateUserName(userName)} />
+                        <SimpleButton elevation={5} width={170} color={colors.theme1.lightAtomicTangerine} title={'CANCEL'} onPress={() => setIsEditName(false)} />
                     </View>
                 </View>}
 
             {isLoading ?
-                <View>
+                <View >
                     <Throbber />
                 </View>
                 :
-                <View style={{ marginTop: 160 }}>
-                    <SimpleButton title={'LOG OUT'} onPress={logOutUser} />
-                    <SimpleButton color={colors.theme1.paradisePink} title={'DELETE'} onPress={deleteUser} />
+                <View style={{ position: 'absolute', alignSelf: 'center', top: windowHeight * 0.6 }}>
+                    <SimpleButton elevation={5} title={'LOG OUT'} onPress={logOutUser} width={100} />
+                    <SimpleButton elevation={5} color={colors.theme1.paradisePink} title={'DELETE'} onPress={() => setModalVisible(true)} width={100} />
                 </View>}
+
+            <ConfirmModal modalVisible={modalVisible} setModalVisible={setModalVisible} onPressConfirm={deleteUser} />
 
         </View>
     );
 };
+
+const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     wrapper: {

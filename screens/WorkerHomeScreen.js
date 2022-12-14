@@ -11,7 +11,7 @@ import Throbber from '../components/Throbber';
 
 // Services
 import { realTimeFirestoreUser, removeTaskFromFirebaseUser } from '../services/firebase';
-import { colors } from '../styles/MyColors';
+import { colors } from '../colors/MyColors';
 
 
 const WorkerHomeScreen = () => {

@@ -17,7 +17,8 @@ import SimpleButton from '../components/SimpleButton';
 import Throbber from '../components/Throbber';
 
 // My Colors
-import { colors } from '../styles/MyColors';
+import { colors } from '../colors/MyColors';
+
 
 const LoginScreen = () => {
 
@@ -90,8 +91,8 @@ const LoginScreen = () => {
         <Throbber />
         :
         <View style={{ marginTop: 30 }} >
-          <SimpleButton title={'SIGN UP'} onPress={() => signUpUser(email, password)} />
-          <SimpleButton title={'SIGN IN'} onPress={() => signInUser(email, password)} />
+          <SimpleButton elevation={5} title={'SIGN IN'} onPress={() => signInUser(email, password)} />
+          <SimpleButton elevation={0} textColor={colors.theme1.aquamarine} color={null} title={'SIGN UP'} onPress={() => signUpUser(email, password)} />
         </View>}
 
     </View>

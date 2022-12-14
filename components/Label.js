@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
+
 const Label = ({ value, title, selectable }) => {
   return (
     <View style={styles.labelContainer}>
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
   },
   label: {
     flex: 4,
-    marginVertical: 10,
+    marginVertical: 5,
     paddingHorizontal: 15,
     paddingVertical: 5,
     borderRadius: 30,

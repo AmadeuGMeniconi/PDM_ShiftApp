@@ -17,7 +17,9 @@ import { ADMIN_EMAIL } from '../../services/firebase';
 // Font Awesome
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHome, faUser } from '@fortawesome/free-solid-svg-icons'
-import { colors } from '../../styles/MyColors';
+
+// My Colors
+import { colors } from '../../colors/MyColors';
 
 
 const AuthNavigation = () => {

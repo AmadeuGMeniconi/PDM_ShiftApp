@@ -9,7 +9,8 @@ import Label from "./Label";
 import TaskModal from "./TaskModal";
 
 // My Colors
-import { colors } from "../styles/MyColors";
+import { colors } from "../colors/MyColors";
+
 
 const UserListItem = ({ item, renderItem, onPressItem, onPressClose, targetUser, modalVisible, setModalVisible, onPressAddTask }) => {
   return (
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 15,
     margin: 5,
-    elevation: 5
+    elevation: 3
   },
   userItemUid: {
     color: 'white',

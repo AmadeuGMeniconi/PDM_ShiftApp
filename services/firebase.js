@@ -1,8 +1,9 @@
+import { Alert, ToastAndroid } from "react-native";
+
+// Services
 import { firebase } from "@react-native-firebase/app";
 import firestore from '@react-native-firebase/firestore'
 import auth from "@react-native-firebase/auth";
-import { useEffect } from "react";
-import { Alert, ToastAndroid } from "react-native";
 
 
 const firebaseConfig = {
@@ -95,7 +96,6 @@ export const addTaskToFirebaseUser = async (user, task) => {
       tasks: arrayUnion
     });
 };
-
 
 export const removeTaskFromFirebaseUser = async (user, task) => {
   ToastAndroid.show(`Task removed from Firestore Document`, ToastAndroid.SHORT);

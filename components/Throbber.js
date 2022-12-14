@@ -2,7 +2,8 @@ import React from 'react'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
 
 // My Colors
-import { colors } from '../styles/MyColors';
+import { colors } from '../colors/MyColors';
+
 
 const Throbber = ({ size = 'large', color = colors.theme1.aquamarine }) => {
   return (

@@ -1,7 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 // My Colors
-import { colors } from "../styles/MyColors";
+import { colors } from "../colors/MyColors";
+
 
 const TaskListItem = ({ user, item, onPressRemove, title }) => {
   return (
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 15,
     margin: 5,
-    elevation: 5
+    elevation: 3
   },
   taskItemDescription: {
     color: 'white',
