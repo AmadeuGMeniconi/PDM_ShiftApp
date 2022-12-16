@@ -20,7 +20,7 @@ const TaskModal = ({ modalVisible, setModalVisible, user }) => {
   const handleSave = () => {
     addTaskToFirebaseUser(user, {
       description: description,
-      date: date.toISOString(),
+      date: date.toDateString(),
       isDone: false
     }).then(() => {
       setDescription('');
